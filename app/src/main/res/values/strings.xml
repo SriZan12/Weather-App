@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="updated_at">Updated at:</string>
+    <string name="wind">Wind</string>
+    <string name="pressure">Pressure</string>
+    <string name="humidity">Humidity</string>
+    <string name="sunset">Sunset</string>
+    <string name="created_by">Created By</string>
+    <string name="_37_u2103">37 ℃</string>
+    <string name="haze">Haze</string>
+    <string name="sat_2022_04_30_07_49_am">Sat,2022–04-30 07:49 AM</string>
+    <string name="_07_42_am">07:42 Am</string>
+</resources>
