@@ -86,6 +86,76 @@ public class MainActivity extends AppCompatActivity  {
         }else{
             getLocation();
         }
+        
+
+            apiInstance.getWeather(lats, lon, apiKey).enqueue(new Callback<Main_Weather>() {
+                @SuppressLint({"ResourceType", "SetTextI18n", "SimpleDateFormat"})
+                @Override
+                public void onResponse(@NonNull Call<Main_Weather> call, @NonNull Response<Main_Weather> response) {
+                    if (response.isSuccessful()) {
+                        Main_Weather main_weather = response.body();
+
+                        assert main_weather != null;
+                        Temperature temperature = main_weather.getTemperature();
+                        Suncondition suncondition = main_weather.getSuncondition();
+                        Wind Wind_Speed = main_weather.getWind();
+                        List<Weather> weatherList = main_weather.getWeatherList();
+
+                        double normal_temp = temperature.getFeels_like() - 273.15;
+                        int normal_temp2 = (int) normal_temp;
+                        main_temp.setText(Integer.toString(normal_temp2) + " \u2103");
+
+                        double temp = temperature.getTemp_min() - 273.15;
+                        int min_temp = (int) temp;
+                        Min_Temp.setText("Min Temp : " + Integer.toString(min_temp) + " \u2103");
+
+                        double temp2 = temperature.getTemp_max() - 273.15;
+                        int max_temp = (int) temp2;
+                        Max_Temp.setText("Max Temp : " + Integer.toString(max_temp) + " \u2103");
+
+                        double humidity1 = temperature.getHumidity();
+                        int humidity = (int) humidity1;
+                        Humidity.setText(Integer.toString(humidity) + "%");
+
+                        double pressure1 = temperature.getPressure();
+                        int pressure = (int) pressure1;
+                        Pressusre.setText(Integer.toString(pressure) + "hpa");
+
+                        Creator.setText("Created by Srijan Khadka");
+
+                        double wind = Wind_Speed.getSpeed();
+                        int wind2 = (int) wind;
+                        Windspeed.setText(Integer.toString(wind2) + " Km/hr");
+
+                        String name = main_weather.getName();
+                        cityName.setText(name);
+
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("EEE,yyyy-MM-dd HH: mm a");
+                        Date Date = new Date();
+
+                        date.setText(fmt.format(Date));
+
+                        java.util.Date date1 = new Date(suncondition.getSunrise() * 1000);
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
+                        Sunrise_time.setText(simpleDateFormat.format(date1));
+
+                        java.util.Date date2 = new Date(suncondition.getSunset() * 1000);
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("h:mm a");
+                        Sunset_time.setText(simpleDateFormat2.format(date2));
+
+                        condition.setText(weatherList.get(0).getMain());
+
+                    }
+
+                }
+
+
+                @Override
+                public void onFailure(Call<Main_Weather> call, Throwable t) {
+                    Toast.makeText(MainActivity.this, "Turn On Internet", Toast.LENGTH_SHORT).show();
+                }
+            });
+
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -165,75 +235,6 @@ public class MainActivity extends AppCompatActivity  {
 
             }
         });
-        
-
-            apiInstance.getWeather(lats, lon, apiKey).enqueue(new Callback<Main_Weather>() {
-                @SuppressLint({"ResourceType", "SetTextI18n", "SimpleDateFormat"})
-                @Override
-                public void onResponse(@NonNull Call<Main_Weather> call, @NonNull Response<Main_Weather> response) {
-                    if (response.isSuccessful()) {
-                        Main_Weather main_weather = response.body();
-
-                        assert main_weather != null;
-                        Temperature temperature = main_weather.getTemperature();
-                        Suncondition suncondition = main_weather.getSuncondition();
-                        Wind Wind_Speed = main_weather.getWind();
-                        List<Weather> weatherList = main_weather.getWeatherList();
-
-                        double normal_temp = temperature.getFeels_like() - 273.15;
-                        int normal_temp2 = (int) normal_temp;
-                        main_temp.setText(Integer.toString(normal_temp2) + " \u2103");
-
-                        double temp = temperature.getTemp_min() - 273.15;
-                        int min_temp = (int) temp;
-                        Min_Temp.setText("Min Temp : " + Integer.toString(min_temp) + " \u2103");
-
-                        double temp2 = temperature.getTemp_max() - 273.15;
-                        int max_temp = (int) temp2;
-                        Max_Temp.setText("Max Temp : " + Integer.toString(max_temp) + " \u2103");
-
-                        double humidity1 = temperature.getHumidity();
-                        int humidity = (int) humidity1;
-                        Humidity.setText(Integer.toString(humidity) + "%");
-
-                        double pressure1 = temperature.getPressure();
-                        int pressure = (int) pressure1;
-                        Pressusre.setText(Integer.toString(pressure) + "hpa");
-
-                        Creator.setText("Created by Srijan Khadka");
-
-                        double wind = Wind_Speed.getSpeed();
-                        int wind2 = (int) wind;
-                        Windspeed.setText(Integer.toString(wind2) + " Km/hr");
-
-                        String name = main_weather.getName();
-                        cityName.setText(name);
-
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat fmt = new SimpleDateFormat("EEE,yyyy-MM-dd HH: mm a");
-                        Date Date = new Date();
-
-                        date.setText(fmt.format(Date));
-
-                        java.util.Date date1 = new Date(suncondition.getSunrise() * 1000);
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("h:mm a");
-                        Sunrise_time.setText(simpleDateFormat.format(date1));
-
-                        java.util.Date date2 = new Date(suncondition.getSunset() * 1000);
-                        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat2 = new SimpleDateFormat("h:mm a");
-                        Sunset_time.setText(simpleDateFormat2.format(date2));
-
-                        condition.setText(weatherList.get(0).getMain());
-
-                    }
-
-                }
-
-
-                @Override
-                public void onFailure(Call<Main_Weather> call, Throwable t) {
-                    Toast.makeText(MainActivity.this, "Turn On Internet", Toast.LENGTH_SHORT).show();
-                }
-            });
 
 
     }
